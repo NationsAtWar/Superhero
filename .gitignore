@@ -1,4 +1,5 @@
 *.class
+<<<<<<< HEAD
 /.git
 /.gradle
 /.settings
@@ -23,3 +24,10 @@ gradlew.bat
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+=======
+
+# Package Files #
+*.jar
+*.war
+*.ear
+>>>>>>> 76192b84bd1ff5128fe554f651718448a95fa54b
