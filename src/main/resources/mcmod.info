@@ -1,0 +1,16 @@
+[
+{
+  "modid": "superhero",
+  "name": "Superhero",
+  "description": "Perks and Abilities Mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "www.nationsatwar.org",
+  "updateUrl": "",
+  "authorList": ["Aculem"],
+  "credits": "The Nations at War staff",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
