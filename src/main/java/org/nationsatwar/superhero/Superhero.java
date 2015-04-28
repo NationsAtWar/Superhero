@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import org.nationsatwar.superhero.events.KeyEvents;
-import org.nationsatwar.superhero.events.UpdateEvents;
+import org.nationsatwar.superhero.events.MovementEvents;
 import org.nationsatwar.superhero.proxy.CommonProxy;
  
 @Mod(modid = Superhero.MODID, 
@@ -47,8 +47,8 @@ public class Superhero {
 		
 		// Register Event Handlers
 		FMLCommonHandler.instance().bus().register(new KeyEvents());
-		FMLCommonHandler.instance().bus().register(new UpdateEvents());
-		MinecraftForge.EVENT_BUS.register(new UpdateEvents());
+		FMLCommonHandler.instance().bus().register(new MovementEvents());
+		MinecraftForge.EVENT_BUS.register(new MovementEvents());
 	}
 	
 	@EventHandler

@@ -14,17 +14,14 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import org.nationsatwar.superhero.player.PlayerManager;
 import org.nationsatwar.superhero.player.PlayerPerks;
 
-public class UpdateEvents {
+public class MovementEvents {
 	
 	public static final UUID movementSpeedID = UUID.randomUUID();
-	
-	private static float movementSpeed = 0;
 	
 	@SubscribeEvent
 	public void tickEvent(PlayerTickEvent event) {
 		
-		if (!event.player.isSprinting())
-			updateMovementSpeed(event.player);
+		updateMovementSpeed(event.player);
 
 		PlayerManager.updateTicks();
 	}
@@ -32,6 +29,7 @@ public class UpdateEvents {
 	@SubscribeEvent
 	public void fovUpdate(FOVUpdateEvent event) {
 		
+		updateMovementSpeed(event.entity);
 		event.newfov = updateFoV(event.entity);
 	}
 	
@@ -40,14 +38,29 @@ public class UpdateEvents {
 		PlayerPerks playerPerks = PlayerManager.getPlayerPerks(player.getUniqueID());
 		IAttributeInstance attrInstance = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 
-		double perkSpeed = playerPerks.movementPerk.getMovementSpeed();
-		movementSpeed = (float) perkSpeed;
-		AttributeModifier speedModifier = attrInstance.getModifier(movementSpeedID);	
+		float newSpeed = 1.0f;
 		
-		if (speedModifier != null && speedModifier.getAmount() == perkSpeed)
+		if (player.capabilities.isFlying) {
+			
+			newSpeed = playerPerks.movementPerk.getFlySpeed();
+			player.capabilities.setFlySpeed(newSpeed);
+			return;
+		}
+		else if (player.isInWater()) {
+			
+			newSpeed = playerPerks.movementPerk.getSwimSpeed();
+			player.moveFlying(player.moveStrafing * newSpeed, player.moveForward * newSpeed, 0.1f);
+			return;
+		}
+		else
+			newSpeed = playerPerks.movementPerk.getMovementSpeed();
+		
+		AttributeModifier speedModifier = attrInstance.getModifier(movementSpeedID);
+		
+		if (speedModifier != null && speedModifier.getAmount() == newSpeed)
 			return;
 		
-		speedModifier = new AttributeModifier(movementSpeedID, "Speed Boost", perkSpeed, 2);
+		speedModifier = new AttributeModifier(movementSpeedID, "Speed Boost", newSpeed, 2);
 		
 		if (attrInstance.getAttribute() != null)
 			attrInstance.removeModifier(speedModifier);
@@ -63,24 +76,27 @@ public class UpdateEvents {
 	 */
 	private float updateFoV(EntityPlayer entity) {
 		
-		float f = 1.0F;
+		float f = 1.0f;
 		
-		if (entity.capabilities.isFlying)
-			f *= 1.1F;
+		PlayerPerks playerPerks = PlayerManager.getPlayerPerks(entity.getUniqueID());
+		float movementSpeed = playerPerks.movementPerk.getMovementSpeed();
 		
 		IAttributeInstance iattributeinstance = entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 		float sprintOffset = (float) iattributeinstance.getAttributeValue();
+		
 		sprintOffset -= (movementSpeed / 11);
+		
 		
 		f = (float) (f * ((sprintOffset / entity.capabilities.getWalkSpeed() + 1.0D) / 2.0D));
 		
-		if (entity.capabilities.getWalkSpeed() == 0.0F || Float.isNaN(f) || Float.isInfinite(f))
+		if (entity.capabilities.getWalkSpeed() == 0.0F || Float.isNaN(f) || 
+				entity.capabilities.isFlying || entity.isInWater() || Float.isInfinite(f))
 			f = 1.0F;
 		
 		if (entity.isUsingItem() && entity.getItemInUse().getItem() == Items.bow) {
 			
 			int i = entity.getItemInUseDuration();
-			float f1 = (float)i / 20.0F;
+			float f1 = (float) i / 20.0F;
 			
 			if (f1 > 1.0F)
 				f1 = 1.0F;
