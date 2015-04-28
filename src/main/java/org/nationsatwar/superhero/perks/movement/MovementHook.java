@@ -9,20 +9,21 @@ import org.nationsatwar.superhero.player.PlayerPerks;
 public class MovementHook extends GenericHook {
 	
 	/**
-	 * Sets the player's new movement speed for a specified duration.
-	 * Affects walk/run/sneak
+	 * Sets the player's new movement speedset for a specified duration.
 	 * 
 	 * @param player The player to add the perk to
-	 * @param newSpeed Changes the player's movement speed (-1 = Stop, 0 = Normal Player Speed, 1 = Double Player Speed, etc)
+	 * @param moveSpeed Changes the player's movement speed (-1 = Stop, 0 = Normal Player Speed, 1 = Double Player Speed, etc)
 	 * @param swimSpeed Changes the player's swim speed (0 = Normal Swim Speed)
 	 * @param flySpeed Changes the player's fly speed (0.1 = Normal Fly Speed)
 	 * @param duration How long the perk will last in ticks (0 is infinite) (20 ticks in a second)
 	 */
-	public void setMovementPerk(EntityPlayer player, float moveSpeed, float swimSpeed, float flySpeed, int duration) {
+	public void setMovementPerk(EntityPlayer player, float walkSpeed, float sprintSpeed, float sneakSpeed, float swimSpeed, float flySpeed, int duration) {
 		
 		// Updates the Players Movement Perk
 		PlayerPerks playerPerks = PlayerManager.getPlayerPerks(player.getUniqueID());
-		playerPerks.movementPerk.setMovementSpeed(moveSpeed);
+		playerPerks.movementPerk.setWalkSpeed(walkSpeed);
+		playerPerks.movementPerk.setSprintSpeed(sprintSpeed);
+		playerPerks.movementPerk.setSneakSpeed(sneakSpeed);
 		playerPerks.movementPerk.setSwimSpeed(swimSpeed);
 		playerPerks.movementPerk.setFlySpeed(flySpeed);
 		playerPerks.movementPerk.setDuration(duration);
@@ -38,6 +39,6 @@ public class MovementHook extends GenericHook {
 		
 		// Updates the Players Movement Perk
 		PlayerPerks playerPerks = PlayerManager.getPlayerPerks(player.getUniqueID());
-		playerPerks.movementPerk.setMovementSpeed(newSpeed);
+		playerPerks.movementPerk.setWalkSpeed(newSpeed);
 	}
 }

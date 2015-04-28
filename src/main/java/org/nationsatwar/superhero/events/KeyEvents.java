@@ -14,7 +14,7 @@ public class KeyEvents {
 		
 		if (ClientProxy.debugKey.isPressed()) {
 			
-			PerksAPI.movementPerks.setMovementPerk(Minecraft.getMinecraft().thePlayer, 3f, 0.4f, 0.4f, 100);
+			PerksAPI.movementPerks.setMovementPerk(Minecraft.getMinecraft().thePlayer, 3f, 4f, 2f, 0.4f, 0.4f, 100);
 		}
 	}
 }

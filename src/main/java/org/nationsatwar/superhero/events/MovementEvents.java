@@ -40,20 +40,33 @@ public class MovementEvents {
 
 		float newSpeed = 1.0f;
 		
+		// Set speed for when the player is flying
 		if (player.capabilities.isFlying) {
 			
 			newSpeed = playerPerks.movementPerk.getFlySpeed();
 			player.capabilities.setFlySpeed(newSpeed);
 			return;
 		}
+
+		// Set speed for when the player is swimming
 		else if (player.isInWater()) {
 			
 			newSpeed = playerPerks.movementPerk.getSwimSpeed();
 			player.moveFlying(player.moveStrafing * newSpeed, player.moveForward * newSpeed, 0.1f);
 			return;
 		}
+
+		// Set speed for when the player is sneaking
+		else if (player.isSneaking())
+			newSpeed = playerPerks.movementPerk.getSneakSpeed();
+
+		// Set speed for when the player is running
+		else if (player.isSprinting())
+			newSpeed = playerPerks.movementPerk.getSprintSpeed();
+		
+		// Set speed for when the player is walking
 		else
-			newSpeed = playerPerks.movementPerk.getMovementSpeed();
+			newSpeed = playerPerks.movementPerk.getWalkSpeed();
 		
 		AttributeModifier speedModifier = attrInstance.getModifier(movementSpeedID);
 		
@@ -79,7 +92,7 @@ public class MovementEvents {
 		float f = 1.0f;
 		
 		PlayerPerks playerPerks = PlayerManager.getPlayerPerks(entity.getUniqueID());
-		float movementSpeed = playerPerks.movementPerk.getMovementSpeed();
+		float movementSpeed = playerPerks.movementPerk.getWalkSpeed();
 		
 		IAttributeInstance iattributeinstance = entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 		float sprintOffset = (float) iattributeinstance.getAttributeValue();
@@ -90,7 +103,7 @@ public class MovementEvents {
 		f = (float) (f * ((sprintOffset / entity.capabilities.getWalkSpeed() + 1.0D) / 2.0D));
 		
 		if (entity.capabilities.getWalkSpeed() == 0.0F || Float.isNaN(f) || 
-				entity.capabilities.isFlying || entity.isInWater() || Float.isInfinite(f))
+				entity.capabilities.isFlying || entity.isSneaking() || entity.isInWater() || Float.isInfinite(f))
 			f = 1.0F;
 		
 		if (entity.isUsingItem() && entity.getItemInUse().getItem() == Items.bow) {

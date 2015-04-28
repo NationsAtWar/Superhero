@@ -4,24 +4,23 @@ import org.nationsatwar.superhero.perks.GenericPerk;
 
 public class MovementPerk extends GenericPerk {
 	
-	private final float defaultMoveSpeed = 0;
+	private final float defaultSpeed = 0;
 	private final float defaultFlySpeed = 0.1f;
-	private final float defaultSwimSpeed = 0;
 	
-	private float movementSpeed = defaultMoveSpeed;
-	private float sneakSpeed = defaultMoveSpeed;
-	private float runSpeed = defaultMoveSpeed;
-	private float swimSpeed = defaultSwimSpeed;
+	private float walkSpeed = defaultSpeed;
+	private float sneakSpeed = defaultSpeed;
+	private float sprintSpeed = defaultSpeed;
+	private float swimSpeed = defaultSpeed;
 	private float flySpeed = defaultFlySpeed;
 	
 	public MovementPerk() {}
 	
-	public float getMovementSpeed() {
-		return movementSpeed;
+	public float getWalkSpeed() {
+		return walkSpeed;
 	}
 	
-	public void setMovementSpeed(float movementSpeed) {
-		this.movementSpeed = movementSpeed;
+	public void setWalkSpeed(float walkSpeed) {
+		this.walkSpeed = walkSpeed;
 	}
 	
 	public float getSneakSpeed() {
@@ -32,12 +31,12 @@ public class MovementPerk extends GenericPerk {
 		this.sneakSpeed = sneakSpeed;
 	}
 
-	public float getRunSpeed() {
-		return runSpeed;
+	public float getSprintSpeed() {
+		return sprintSpeed;
 	}
 
-	public void setRunSpeed(float runSpeed) {
-		this.runSpeed = runSpeed;
+	public void setSprintSpeed(float sprintSpeed) {
+		this.sprintSpeed = sprintSpeed;
 	}
 
 	public float getSwimSpeed() {
@@ -59,8 +58,10 @@ public class MovementPerk extends GenericPerk {
 	@Override
 	protected void durationFinished() {
 		
-		movementSpeed = defaultMoveSpeed;
+		walkSpeed = defaultSpeed;
+		sneakSpeed = defaultSpeed;
+		sprintSpeed = defaultSpeed;
+		swimSpeed = defaultSpeed;
 		flySpeed = defaultFlySpeed;
-		swimSpeed = defaultSwimSpeed;
 	}
 }
