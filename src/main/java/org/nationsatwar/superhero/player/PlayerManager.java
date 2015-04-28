@@ -24,4 +24,10 @@ public class PlayerManager {
 		
 		return newPlayerPerks;
 	}
+	
+	public static void updateTicks() {
+		
+		for (PlayerPerks playerPerks : playerPerksList)
+			playerPerks.updateDuration();
+	}
 }

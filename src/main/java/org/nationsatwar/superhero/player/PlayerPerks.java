@@ -1,18 +1,25 @@
 package org.nationsatwar.superhero.player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.entity.SharedMonsterAttributes;
+import org.nationsatwar.superhero.perks.GenericPerk;
+import org.nationsatwar.superhero.perks.MovementPerk;
 
 public class PlayerPerks {
 	
 	private UUID playerUUID;
 	
-	private double movementSpeed = SharedMonsterAttributes.movementSpeed.getDefaultValue();
+	private List<GenericPerk> perkList = new ArrayList<GenericPerk>();
+	
+	public MovementPerk movementPerk = new MovementPerk();
 	
 	public PlayerPerks(UUID playerUUID) {
 		
 		this.playerUUID = playerUUID;
+		
+		perkList.add(movementPerk);
 	}
 	
 	public boolean equals(UUID playerUUID) {
@@ -23,11 +30,9 @@ public class PlayerPerks {
 			return false;
 	}
 	
-	public double getMovementSpeed() {
-		return movementSpeed;
-	}
-	
-	public void setMovementSpeed(double movementSpeed) {
-		this.movementSpeed = movementSpeed;
+	public void updateDuration() {
+		
+		for (GenericPerk perk : perkList)
+			perk.tickDownDuration();
 	}
 }

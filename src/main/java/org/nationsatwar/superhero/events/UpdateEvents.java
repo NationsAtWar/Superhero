@@ -6,6 +6,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -24,13 +25,14 @@ public class UpdateEvents {
 		
 		if (!event.player.isSprinting())
 			updateMovementSpeed(event.player);
+
+		PlayerManager.updateTicks();
 	}
 	
 	@SubscribeEvent
 	public void fovUpdate(FOVUpdateEvent event) {
 		
-		// Regulates Field of Vision changes
-		event.newfov = event.fov - ((movementSpeed * 0.7425f) + 0.2425f);
+		event.newfov = updateFoV(event.entity);
 	}
 	
 	private void updateMovementSpeed(EntityPlayer player) {
@@ -38,7 +40,7 @@ public class UpdateEvents {
 		PlayerPerks playerPerks = PlayerManager.getPlayerPerks(player.getUniqueID());
 		IAttributeInstance attrInstance = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 
-		double perkSpeed = playerPerks.getMovementSpeed();
+		double perkSpeed = playerPerks.movementPerk.getMovementSpeed();
 		movementSpeed = (float) perkSpeed;
 		AttributeModifier speedModifier = attrInstance.getModifier(movementSpeedID);	
 		
@@ -50,5 +52,44 @@ public class UpdateEvents {
 		if (attrInstance.getAttribute() != null)
 			attrInstance.removeModifier(speedModifier);
 		attrInstance.applyModifier(speedModifier);
+	}
+	
+	/**
+	 * This method is a bit of an oddity. For some reason you can't grab a player's FoV without it 
+	 * triggering Forge's FoV Update event, therefore creating a pointless recursive loop. So instead I
+	 * simply copied the code for it here and changed the tiny bit that needed changing.
+	 * 
+	 * This method will do the trick, but once Forge fixes this issue, it'll be nice to clean this code up.
+	 */
+	private float updateFoV(EntityPlayer entity) {
+		
+		float f = 1.0F;
+		
+		if (entity.capabilities.isFlying)
+			f *= 1.1F;
+		
+		IAttributeInstance iattributeinstance = entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
+		float sprintOffset = (float) iattributeinstance.getAttributeValue();
+		sprintOffset -= (movementSpeed / 11);
+		
+		f = (float) (f * ((sprintOffset / entity.capabilities.getWalkSpeed() + 1.0D) / 2.0D));
+		
+		if (entity.capabilities.getWalkSpeed() == 0.0F || Float.isNaN(f) || Float.isInfinite(f))
+			f = 1.0F;
+		
+		if (entity.isUsingItem() && entity.getItemInUse().getItem() == Items.bow) {
+			
+			int i = entity.getItemInUseDuration();
+			float f1 = (float)i / 20.0F;
+			
+			if (f1 > 1.0F)
+				f1 = 1.0F;
+			else
+				f1 *= f1;
+			
+			f *= 1.0F - f1 * 0.15F;
+		}
+		
+		return f;
 	}
 }
