@@ -9,10 +9,10 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
-import org.nationsatwar.superhero.events.KeyEvents;
+import org.nationsatwar.superhero.events.BreathabilityEvents;
 import org.nationsatwar.superhero.events.MovementEvents;
+import org.nationsatwar.superhero.events.TickEvents;
 import org.nationsatwar.superhero.proxy.CommonProxy;
  
 @Mod(modid = Superhero.MODID, 
@@ -44,21 +44,17 @@ public class Superhero {
 		
 		// Register Client Classes
 		proxy.registerKeybindings();
+		proxy.registerClientEvents();
 		
 		// Register Event Handlers
-		FMLCommonHandler.instance().bus().register(new KeyEvents());
 		FMLCommonHandler.instance().bus().register(new MovementEvents());
+		FMLCommonHandler.instance().bus().register(new TickEvents());
 		MinecraftForge.EVENT_BUS.register(new MovementEvents());
+		MinecraftForge.EVENT_BUS.register(new BreathabilityEvents());
 	}
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		
-		
-	}
-	
-	@EventHandler
-	public void commandEvent(FMLServerStartingEvent event) {
 		
 		
 	}

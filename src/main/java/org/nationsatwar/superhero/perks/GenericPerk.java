@@ -6,8 +6,11 @@ public class GenericPerk {
 	
 	public void tickDownDuration() {
 		
-		if (duration > 0)
+		if (duration > 0) {
+			
 			duration--;
+			onTick();
+		}
 		
 		else if (duration == 0) {
 			
@@ -23,6 +26,7 @@ public class GenericPerk {
 		
 		this.duration = duration;
 	}
-	
+
+	protected void onTick() {}
 	protected void durationFinished() {}
 }

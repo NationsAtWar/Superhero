@@ -22,8 +22,6 @@ public class MovementEvents {
 	public void tickEvent(PlayerTickEvent event) {
 		
 		updateMovementSpeed(event.player);
-
-		PlayerManager.updateTicks();
 	}
 	
 	@SubscribeEvent
