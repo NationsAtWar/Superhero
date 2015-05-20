@@ -9,12 +9,12 @@ import org.nationsatwar.superhero.events.KeyEvents;
 
 public class ClientProxy extends CommonProxy {
 
-	public static KeyBinding debugKey;
+	public static KeyBinding superheroKey;
 	
 	@Override
 	public void registerKeybindings() {
 		
-		debugKey = KeyBindings.registerKey(Keyboard.KEY_R, "debugKey");
+		superheroKey = KeyBindings.registerKey(Keyboard.KEY_H, "superheroKey");
 	}
 	
 	@Override

@@ -12,7 +12,7 @@ public class KeyEvents {
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
 		
-		if (ClientProxy.debugKey.isPressed()) {
+		if (ClientProxy.superheroKey.isPressed()) {
 			
 			PerksAPI.movementPerks.setMovementPerk(Minecraft.getMinecraft().thePlayer, 3f, 4f, 2f, 0.4f, 0.4f, 100);
 			PerksAPI.breathabilityPerks.setBreathabilityPerk(Minecraft.getMinecraft().thePlayer, 400, 20000);
